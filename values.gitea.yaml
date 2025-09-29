@@ -1,0 +1,27 @@
+postgresql-ha:
+  enabled: false
+postgresql:
+  enabled: false
+
+deployment:
+  env:
+    - name: GITEA__database__DB_TYPE
+      value: postgres
+    - name: GITEA__database__HOST
+      value: "gitea-pg-rw.gitea.svc.cluster.local:5432" 
+    - name: GITEA__database__NAME
+      value: "gitea"
+    - name: GITEA__database__USER
+      valueFrom:
+        secretKeyRef:
+          name: gitea-pg-app
+          key: username
+    - name: GITEA__database__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: gitea-pg-app
+          key: password
+    # TLS: CNPG espone TLS server-side di default.
+    # Per iniziare va bene "require". Per validazione CA vedi blocco TLS sotto.
+    - name: GITEA__database__SSL_MODE
+      value: "require"
