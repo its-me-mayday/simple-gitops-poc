@@ -33,12 +33,12 @@ resource "gitea_repository" "prod_repo" {
   name = "cluster-prod-poc"
 }
 
-resource "gitea_token" "test_token" {
-  name   = "test_token"
+resource "gitea_token" "api_token" {
+  name   = "api_token"
   scopes = ["all"]
 }
 
 output "token" {
-  value     = resource.gitea_token.test_token.token
+  value     = resource.gitea_token.api_token.token
   sensitive = true
 }
