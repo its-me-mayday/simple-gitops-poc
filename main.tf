@@ -32,3 +32,13 @@ resource "gitea_repository" "prod_repo" {
   username = gitea_org.test_org.name
   name = "cluster-prod-poc"
 }
+
+resource "gitea_token" "test_token" {
+  name   = "test_token"
+  scopes = ["all"]
+}
+
+output "token" {
+  value     = resource.gitea_token.test_token.token
+  sensitive = true
+}
