@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-private-https-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: http://my-gitea-http.gitea.svc:3000/simple-gitops-poc/cluster-dev-poc.git
+  password: dbc25fe4d9eb260756b084b079178eca1f25599e
+  username: gitea_admin
+  project: default
+  insecure: "true"
