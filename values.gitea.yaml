@@ -3,6 +3,9 @@ postgresql-ha:
 postgresql:
   enabled: false
 
+service:
+  type: NodePort
+
 deployment:
   env:
     - name: GITEA__database__DB_TYPE
