@@ -1,12 +1,5 @@
 locals {
   charts = {
-    calico = {
-      chart_name   = "tigera-operator"
-      namespace    = "calico"
-      release_name = "calico"
-      repository   = "https://docs.tigera.io/calico/charts"
-      version      = "v3.29.3"
-    }
     argocd = {
       chart_name   = "argo-cd"
       namespace    = "argocd"

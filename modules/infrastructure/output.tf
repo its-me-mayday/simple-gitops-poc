@@ -3,11 +3,6 @@ output "kind" {
   value       = kind_cluster.my_cluster
 }
 
-output "calico" {
-  description = "Calico resource"
-  value       = helm_release.calico
-}
-
 output "argocd" {
   description = "ArgoCD resource"
   value       = helm_release.argocd
@@ -19,6 +14,11 @@ output "gitea" {
 }
 
 output "cnpg_operator" {
-  description = "CNPG Operator resource"
+  description = "cnpg operator resource"
   value       = helm_release.cnpg_operator
+}
+
+output "cnpg_cluster_gitea" {
+  description = "CNPG cluster GiTea"
+  value       = helm_release.cnpg_cluster_gitea
 }

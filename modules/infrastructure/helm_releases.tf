@@ -1,16 +1,3 @@
-resource "helm_release" "calico" {
-  name = local.charts.calico.release_name
-
-  repository       = local.charts.calico.repository
-  chart            = local.charts.calico.chart_name
-  namespace        = local.charts.calico.namespace
-  create_namespace = true
-  version          = local.charts.calico.version
-  wait             = true
-
-  depends_on = [kind_cluster.my_cluster]
-}
-
 resource "helm_release" "argocd" {
   name = local.charts.argocd.release_name
 
@@ -31,7 +18,7 @@ resource "helm_release" "argocd" {
     })
   ]
 
-  depends_on = [helm_release.calico]
+  depends_on = [kind_cluster.my_cluster]
 }
 
 resource "helm_release" "cnpg_operator" {
@@ -44,7 +31,7 @@ resource "helm_release" "cnpg_operator" {
   version          = local.charts.cnpg.version
   wait             = true
 
-  depends_on = [helm_release.calico]
+  depends_on = [kind_cluster.my_cluster]
 }
 
 resource "helm_release" "cnpg_cluster_gitea" {
