@@ -1,3 +1,16 @@
+resource "helm_release" "harbor" {
+  name = local.charts.harbor.release_name
+
+  repository       = local.charts.harbor.repository
+  chart            = local.charts.harbor.chart_name
+  namespace        = local.charts.harbor.namespace
+  create_namespace = true
+  version          = local.charts.harbor.version
+  wait             = true
+
+  depends_on = [kind_cluster.my_cluster]
+}
+
 resource "helm_release" "argocd" {
   name = local.charts.argocd.release_name
 

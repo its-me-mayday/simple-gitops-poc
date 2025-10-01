@@ -28,5 +28,12 @@ locals {
       repository   = "https://dl.gitea.com/charts"
       version      = "v12.3.0"
     }
+    harbor = {
+      chart_name   = "harbor"
+      namespace    = "harbor"
+      release_name = "harbor"
+      repository   = "https://helm.goharbor.io"
+      version      = "v1.18.0"
+    }
   }
 }
