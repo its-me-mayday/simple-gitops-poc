@@ -27,6 +27,10 @@ lint:
 	@echo "Running open-tofu linting"
 	$(TOFU) fmt --recursive
 
+clean:
+	@echo "Running cleaning state files"
+	rm -rf .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
+
 help:
 	@echo "Makefile commands:"
 	@echo "  make init           - Init Tofu backend"
@@ -35,4 +39,5 @@ help:
 	@echo "  make apply          - Apply all resources Tofu managed"
 	@echo "  make destroy        - Destroy all resources Tofu managed"
 	@echo "  make lint           - Lint all resources Tofu files"
+	@echo "  make clean          - Clean Tofu state files"
 	@echo "  make help           - Show this message"
