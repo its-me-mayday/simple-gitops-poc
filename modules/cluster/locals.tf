@@ -21,6 +21,13 @@ locals {
       repository   = "https://cloudnative-pg.github.io/charts"
       version      = "v0.26.0"
     }
+    cnpg_cluster_gitea = {
+      chart_name   = "cluster"
+      namespace    = "gitea"
+      release_name = "gitea-pg"
+      repository   = "https://cloudnative-pg.github.io/charts"
+      version      = "v0.3.1"
+    }
     gitea = {
       chart_name   = "gitea"
       namespace    = "gitea"

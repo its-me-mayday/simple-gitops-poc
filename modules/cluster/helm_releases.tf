@@ -47,6 +47,44 @@ resource "helm_release" "cnpg_operator" {
   depends_on = [helm_release.calico]
 }
 
+resource "helm_release" "cnpg_cluster_gitea" {
+  name             = local.charts.cnpg_cluster_gitea.release_name
+  repository       = local.charts.cnpg_cluster_gitea.repository
+  chart            = local.charts.cnpg_cluster_gitea.chart_name
+  version          = local.charts.cnpg_cluster_gitea.version
+  namespace        = local.charts.cnpg_cluster_gitea.namespace
+  create_namespace = true
+
+  values = [yamlencode({
+    nameOverride      = ""
+    fullnameOverride  = "gitea-pg"
+    namespaceOverride = ""
+
+    type    = "postgresql"
+    version = { postgresql = "16" }
+
+    mode = "standalone"
+
+    cluster = {
+      instances = 2
+      storage = {
+        size = "10Gi"
+      }
+
+      initdb = {
+        database = "gitea"
+        owner    = "gitea"
+      }
+
+      enableSuperuserAccess = true
+    }
+
+    backups = { enabled = false }
+  })]
+
+  depends_on = [helm_release.cnpg_operator]
+}
+
 resource "helm_release" "gitea" {
   name = local.charts.gitea.release_name
 
@@ -98,5 +136,5 @@ resource "helm_release" "gitea" {
     })
   ]
 
-  depends_on = [helm_release.cnpg_operator]
+  depends_on = [helm_release.cnpg_cluster_gitea]
 }
