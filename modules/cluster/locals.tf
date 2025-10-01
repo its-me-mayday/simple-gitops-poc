@@ -37,8 +37,3 @@ locals {
     }
   }
 }
-
-#
-# kubectl create ns gitea
-# kubectl apply -f cr.cluster.yaml --namespace gitea
-#
