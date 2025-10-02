@@ -24,3 +24,7 @@ variable "secret_name" {
 variable "kubeconfig_path" {
   type = string
 }
+
+variable "cluster" {
+  type = any
+}

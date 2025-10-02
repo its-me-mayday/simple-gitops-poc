@@ -6,6 +6,28 @@ resource "helm_release" "harbor" {
   namespace        = local.charts.harbor.namespace
   create_namespace = true
   version          = local.charts.harbor.version
+  values = [
+    yamlencode({
+      expose = {
+        type = "NodePort"
+        tls = {
+          enabled = false
+        }
+      }
+      trivy = {
+        enabled = false
+      }
+      notary = {
+        enabled = false
+      }
+      clair = {
+        enabled = false
+      }
+      exporter = {
+        enabled = false
+      }
+    })
+  ]
 
   depends_on = [kind_cluster.my_cluster]
 }
@@ -21,10 +43,16 @@ resource "helm_release" "argocd" {
 
   values = [
     yamlencode({
+      dex = {
+        enabled = false
+      }
+      notifications = {
+        enabled = false
+      }
       server = {
         service = {
           type     = "NodePort"
-          nodePort = "30082"
+          nodePortHttp = "30081"
         }
       }
     })

@@ -17,6 +17,7 @@ provider "gitea" {
 }
 
 data "external" "gitea_admin_secret" {
+  depends_on = [ var.cluster ]
   program = ["bash", "-lc", <<-EOS
     set -euo pipefail
     export KUBECONFIG="${abspath(var.kubeconfig_path)}"

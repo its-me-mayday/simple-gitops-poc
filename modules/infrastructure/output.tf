@@ -23,3 +23,7 @@ output "cnpg_cluster_gitea" {
   value       = helm_release.cnpg_cluster_gitea
 }
 
+output "cluster" {
+  value = kind_cluster.my_cluster 
+}
+
