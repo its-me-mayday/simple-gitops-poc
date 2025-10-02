@@ -22,3 +22,4 @@ output "cnpg_cluster_gitea" {
   description = "CNPG cluster GiTea"
   value       = helm_release.cnpg_cluster_gitea
 }
+
