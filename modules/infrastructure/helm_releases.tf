@@ -6,7 +6,6 @@ resource "helm_release" "harbor" {
   namespace        = local.charts.harbor.namespace
   create_namespace = true
   version          = local.charts.harbor.version
-  wait             = true
 
   depends_on = [kind_cluster.my_cluster]
 }
@@ -19,7 +18,6 @@ resource "helm_release" "argocd" {
   namespace        = local.charts.argocd.namespace
   create_namespace = true
   version          = local.charts.argocd.version
-  wait             = true
 
   values = [
     yamlencode({
@@ -42,7 +40,6 @@ resource "helm_release" "cnpg_operator" {
   namespace        = local.charts.cnpg.namespace
   create_namespace = true
   version          = local.charts.cnpg.version
-  wait             = true
 
   depends_on = [kind_cluster.my_cluster]
 }
@@ -93,7 +90,6 @@ resource "helm_release" "gitea" {
   namespace        = local.charts.gitea.namespace
   create_namespace = true
   version          = local.charts.gitea.version
-  wait             = true
 
   values = [
     yamlencode({
