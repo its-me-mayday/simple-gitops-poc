@@ -36,4 +36,8 @@ locals {
       version      = "v1.18.0"
     }
   }
+  gitea = {
+    secret_name = "gitea-admin"
+    namespace   = "gitea"
+  }
 }
