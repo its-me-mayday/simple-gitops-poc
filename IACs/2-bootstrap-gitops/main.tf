@@ -2,19 +2,13 @@ terraform {
   required_version = ">= 1.9.1"
 }
 
-module "gitops" {
-  source               = "./modules/gitops"
+module "repository" {
+  source               = "./modules/repository"
   gitea_admin_username = data.external.gitea_admin_secret.result.username
   gitea_admin_password = data.external.gitea_admin_secret.result.password
 }
 
-data "external" "gitea_admin_secret" {
-  program = ["bash", "-lc", <<-EOS
-    set -euo pipefail
-    export KUBECONFIG="${abspath(local.k8s_config_path)}"
-    u=$(kubectl -n "${var.gitea_namespace}" get secret "${var.gitea_secret_name}" -o jsonpath='{.data.username}' | base64 -d)
-    p=$(kubectl -n "${var.gitea_namespace}" get secret "${var.gitea_secret_name}" -o jsonpath='{.data.password}' | base64 -d)
-    jq -n --arg u "$u" --arg p "$p" '{username:$u, password:$p}'
-  EOS
-  ]
+module "continous_deployment" {
+  source                = "./modules/continous_deployment"
+  argocd_admin_password = data.external.argocd_admin_secret.result.password
 }
