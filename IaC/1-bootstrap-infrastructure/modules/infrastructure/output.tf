@@ -24,6 +24,5 @@ output "cnpg_cluster_gitea" {
 }
 
 output "cluster" {
-  value = kind_cluster.my_cluster 
+  value = kind_cluster.my_cluster
 }
-
