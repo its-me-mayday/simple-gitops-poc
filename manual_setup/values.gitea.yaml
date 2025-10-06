@@ -24,7 +24,5 @@ deployment:
         secretKeyRef:
           name: gitea-pg-app
           key: password
-    # TLS: CNPG espone TLS server-side di default.
-    # Per iniziare va bene "require". Per validazione CA vedi blocco TLS sotto.
     - name: GITEA__database__SSL_MODE
       value: "require"

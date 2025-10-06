@@ -7,11 +7,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: CreateNamespace=true
 spec:
-  project: default
+  project: simple-gitops-poc-project
   source:
-    repoURL: http://my-gitea-http.gitea.svc:3000/simple-gitops-poc/cluster-dev-poc.git
+    repoURL: http://my-gitea-http.gitea.svc:3000/simple-gitops-poc/dev-cluster.git
     targetRevision: main  
-    path: environments/dev
+    path: manifests/demo_app
   destination:
     server: https://kubernetes.default.svc
     namespace: demo
