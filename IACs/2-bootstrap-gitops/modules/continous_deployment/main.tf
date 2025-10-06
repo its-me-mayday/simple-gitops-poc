@@ -11,4 +11,5 @@ provider "argocd" {
   server_addr = var.argocd_server_addr
   username    = var.argocd_admin_username
   password    = var.argocd_admin_password
+  insecure    = true
 }
