@@ -97,3 +97,36 @@ resource "argocd_application" "prod_application_ms" {
     }
   }
 }
+
+resource "argocd_application" "shared_infra_application_ms" {
+  metadata {
+    name      = "shared-infra-application-ms"
+    namespace = "argocd"
+  }
+
+  spec {
+    project = argocd_project.shared_infra_project.metadata[0].name
+
+    source {
+      repo_url        = "http://${var.gitea_svc}:3000/simple-gitops-poc/shared-infra.git"
+      target_revision = "main"
+      path            = "applications"
+    }
+
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = "shared-infra"
+    }
+    sync_policy {
+      automated {
+        self_heal   = true
+        allow_empty = true
+      }
+      managed_namespace_metadata {
+        annotations = {
+          "CreateNamespace" : "true"
+        }
+      }
+    }
+  }
+}

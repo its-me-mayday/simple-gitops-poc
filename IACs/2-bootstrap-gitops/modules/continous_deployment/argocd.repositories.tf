@@ -22,3 +22,11 @@ resource "argocd_repository" "prod_cluster" {
   name     = "Repository Secret for prod cluster"
   insecure = true
 }
+
+resource "argocd_repository" "shared_infra_repo" {
+  repo     = "http://${var.gitea_svc}:3000/simple-gitops-poc/shared-infra.git"
+  username = var.gitea_admin_username
+  password = var.gitea_token
+  name     = "Repository Secret for shared infra repo"
+  insecure = true
+}

@@ -16,3 +16,8 @@ resource "gitea_repository" "prod_repo" {
   username = gitea_org.simple_gitops_poc_org.name
   name     = "prod-cluster"
 }
+
+resource "gitea_repository" "shared_infra_repo" {
+  username = gitea_org.simple_gitops_poc_org.name
+  name     = "shared-infra"
+}

@@ -7,7 +7,7 @@ resource "argocd_project" "dev_project" {
   spec {
     description = "DEV simple project"
 
-    source_namespaces = ["argocd"]
+    source_namespaces = ["*"]
     source_repos      = ["*"]
 
     destination {
@@ -18,16 +18,6 @@ resource "argocd_project" "dev_project" {
       server    = "https://kubernetes.default.svc"
       namespace = "dev"
     }
-
-    cluster_resource_blacklist {
-      group = "*"
-      kind  = "*"
-    }
-    namespace_resource_whitelist {
-      group = "*"
-      kind  = "*"
-    }
-
   }
 }
 
@@ -40,7 +30,7 @@ resource "argocd_project" "staging_project" {
   spec {
     description = "STAGING simple project"
 
-    source_namespaces = ["argocd"]
+    source_namespaces = ["*"]
     source_repos      = ["*"]
 
     destination {
@@ -51,16 +41,6 @@ resource "argocd_project" "staging_project" {
       server    = "https://kubernetes.default.svc"
       namespace = "staging"
     }
-
-    cluster_resource_blacklist {
-      group = "*"
-      kind  = "*"
-    }
-    namespace_resource_whitelist {
-      group = "*"
-      kind  = "*"
-    }
-
   }
 }
 
@@ -73,7 +53,7 @@ resource "argocd_project" "prod_project" {
   spec {
     description = "PROD simple project"
 
-    source_namespaces = ["argocd"]
+    source_namespaces = ["*"]
     source_repos      = ["*"]
 
     destination {
@@ -84,15 +64,28 @@ resource "argocd_project" "prod_project" {
       server    = "https://kubernetes.default.svc"
       namespace = "prod"
     }
+  }
+}
 
-    cluster_resource_blacklist {
-      group = "*"
-      kind  = "*"
-    }
-    namespace_resource_whitelist {
-      group = "*"
-      kind  = "*"
-    }
+resource "argocd_project" "shared_infra_project" {
+  metadata {
+    name      = "shared-infra"
+    namespace = "argocd"
+  }
 
+  spec {
+    description = "SHARED INFRA simple project"
+
+    source_namespaces = ["*"]
+    source_repos      = ["*"]
+
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = "argocd"
+    }
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = "shared-infra"
+    }
   }
 }
