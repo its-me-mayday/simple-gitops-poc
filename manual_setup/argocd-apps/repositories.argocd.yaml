@@ -1,13 +1,42 @@
+---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: my-private-https-repo
+  name: private-dev-repo
   namespace: argocd
   labels:
     argocd.argoproj.io/secret-type: repository
 stringData:
-  url: http://my-gitea-http.gitea.svc:3000/simple-gitops-poc/cluster-dev-poc.git
-  password: dbc25fe4d9eb260756b084b079178eca1f25599e
-  username: gitea_admin
-  project: default
+  url: http://gitea-http.gitea.svc:3000/simple-gitops-poc/dev-cluster.git
+  password: <PASSWORD>
+  username: <USERNAME>
+  project: dev-project
+  insecure: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-staging-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: http://gitea-http.gitea.svc:3000/simple-gitops-poc/staging-cluster.git
+  password: <PASSWORD>
+  username: <USERNAME>
+  project: staging-project
+  insecure: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-prod-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: http://gitea-http.gitea.svc:3000/simple-gitops-poc/prod-cluster.git
+  password: <PASSWORD>
+  username: <USERNAME>
+  project: prod-project
   insecure: "true"
