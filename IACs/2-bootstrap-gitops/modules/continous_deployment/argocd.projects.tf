@@ -18,6 +18,10 @@ resource "argocd_project" "dev_project" {
       server    = "https://kubernetes.default.svc"
       namespace = "dev"
     }
+    cluster_resource_whitelist {
+      group = "*"
+      kind  = "*"
+    }
   }
 }
 
@@ -40,6 +44,10 @@ resource "argocd_project" "staging_project" {
     destination {
       server    = "https://kubernetes.default.svc"
       namespace = "staging"
+    }
+    cluster_resource_whitelist {
+      group = "*"
+      kind  = "*"
     }
   }
 }
@@ -64,6 +72,10 @@ resource "argocd_project" "prod_project" {
       server    = "https://kubernetes.default.svc"
       namespace = "prod"
     }
+    cluster_resource_whitelist {
+      group = "*"
+      kind  = "*"
+    }
   }
 }
 
@@ -86,6 +98,10 @@ resource "argocd_project" "shared_infra_project" {
     destination {
       server    = "https://kubernetes.default.svc"
       namespace = "shared-infra"
+    }
+    cluster_resource_whitelist {
+      group = "*"
+      kind  = "*"
     }
   }
 }
