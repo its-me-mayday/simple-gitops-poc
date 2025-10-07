@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 data:
-  token: REhqMEdBRUt4dDFJa3o5MTB6Q0tObVE5Q3liRjQxUDNNOFR1NlZpSw==
+  token: bHRwWnZEeEM4aEVVdTFGN3M0eXVLRlBIUnFxTnRLekw4cFZHNFZEdg==
 kind: Secret
 metadata:
   name: runner-secret
