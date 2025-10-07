@@ -2,19 +2,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo-app
+  name: dev-demo-app
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-options: CreateNamespace=true
 spec:
-  project: simple-gitops-poc-project
+  project: dev-project
   source:
-    repoURL: http://my-gitea-http.gitea.svc:3000/simple-gitops-poc/dev-cluster.git
+    repoURL: http://gitea-http.gitea.svc:3000/simple-gitops-poc/dev-cluster.git
     targetRevision: main  
-    path: manifests/demo_app
+    path: manifests/demo-app
   destination:
     server: https://kubernetes.default.svc
-    namespace: demo
+    namespace: staging
   syncPolicy:
     automated:
       selfHeal: true
@@ -28,3 +28,93 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: staging-demo-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: CreateNamespace=true
+spec:
+  project: staging-project
+  source:
+    repoURL: http://gitea-http.gitea.svc:3000/simple-gitops-poc/staging-cluster.git
+    targetRevision: main  
+    path: manifests/demo-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: staging
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - Validate=true
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: CreateNamespace=true
+spec:
+  project: prod-project
+  source:
+    repoURL: http://gitea-http.gitea.svc:3000/simple-gitops-poc/prod-cluster.git
+    targetRevision: main
+    path: manifests/demo-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - Validate=true
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: act-runner
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: CreateNamespace=true
+spec:
+  project: shared-infra-project
+  source:
+    repoURL: http://gitea-http.gitea.svc:3000/simple-gitops-poc/shared-infra.git
+    targetRevision: main
+    path: manifests/act-runner
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: shared-infra
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - Validate=true
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3
