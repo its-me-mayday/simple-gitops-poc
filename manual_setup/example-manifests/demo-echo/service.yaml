@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: demo-echo
-  namespace: ms-space
 spec:
   type: ClusterIP
   selector:

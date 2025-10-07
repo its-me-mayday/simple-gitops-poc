@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: echo
-          image: ghcr.io/ealen/echo-server:latest
+          image: docker.io/ealen/echo-server:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 80
