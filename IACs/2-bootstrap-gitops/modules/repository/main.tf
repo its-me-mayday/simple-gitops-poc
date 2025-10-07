@@ -15,4 +15,3 @@ provider "gitea" {
   password = var.gitea_admin_password
   insecure = true
 }
-
