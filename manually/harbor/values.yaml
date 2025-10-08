@@ -1,0 +1,12 @@
+expose:
+  type: NodePort
+  tls:
+    enabled: false
+trivy:
+  enabled: false
+clair:
+  enabled: false
+notary:
+  enabled: false
+exporter:
+  enabled: false
