@@ -5,7 +5,7 @@ expose:
   nodePort:
     ports:
       http:
-        nodePort: 30080   # scegli tu, libero sul nodo
+        nodePort: 30080
 externalURL: "http://172.18.0.2:30080"
 trivy:
   enabled: false

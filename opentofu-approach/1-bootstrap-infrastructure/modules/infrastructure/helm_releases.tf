@@ -8,8 +8,16 @@ resource "helm_release" "harbor" {
   version          = local.charts.harbor.version
   values = [
     yamlencode({
+      externalURL = "http://172.18.0.2:30080"
       expose = {
-        type = "NodePort"
+        type = "nodePort"
+        nodePort = {
+          ports = {
+            http = {
+              nodePort = 30080
+            }
+          }
+        }
         tls = {
           enabled = false
         }
