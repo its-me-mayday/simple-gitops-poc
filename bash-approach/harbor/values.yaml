@@ -1,7 +1,12 @@
 expose:
-  type: NodePort
+  type: nodePort
   tls:
     enabled: false
+  nodePort:
+    ports:
+      http:
+        nodePort: 30080   # scegli tu, libero sul nodo
+externalURL: "http://172.18.0.2:30080"
 trivy:
   enabled: false
 clair:
