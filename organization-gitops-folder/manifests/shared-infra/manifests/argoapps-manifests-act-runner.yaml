@@ -1,0 +1,67 @@
+---
+apiVersion: v1
+data:
+  token: bHRwWnZEeEM4aEVVdTFGN3M0eXVLRlBIUnFxTnRLekw4cFZHNFZEdg==
+kind: Secret
+metadata:
+  name: argoapps-runner-secret
+type: Opaqu
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: general-act-runner
+  name: general-act-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: general-act-runner
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: general-act-runner
+    spec:
+      restartPolicy: Always
+      volumes:
+      - name: docker-certs
+        emptyDir: {}
+      containers:
+      - name: runner
+        image: docker.io/gitea/act_runner:nightly
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "-c", "while ! nc -z localhost 2376 </dev/null; do echo 'waiting for docker daemon...'; sleep 5; done; /sbin/tini -- run.sh"]
+        env:
+        - name: DOCKER_HOST
+          value: tcp://localhost:2376
+        - name: DOCKER_CERT_PATH
+          value: /certs/client
+        - name: DOCKER_TLS_VERIFY
+          value: "1"
+        - name: GITEA_INSTANCE_URL
+          value: http://gitea-http.gitea.svc:3000
+        - name: GITEA_RUNNER_REGISTRATION_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: runner-secret
+              key: token
+        volumeMounts:
+        - name: docker-certs
+          mountPath: /certs
+      - name: daemon
+        image: docker:23.0.6-dind
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: /certs
+        args:
+          - --host=tcp://0.0.0.0:2376
+          - --insecure-registry=172.18.0.2:30080
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: docker-certs
+          mountPath: /certs

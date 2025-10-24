@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todolist-config
+  labels:
+    app: todolist-service
+data:
+  SERVER_PORT: "8080"
+  DB_URL: "jdbc:postgresql://gitea-pg-rw.gitea.svc.cluster.local:5432/todos"
+  DB_DRIVER: "org.postgresql.Driver"
