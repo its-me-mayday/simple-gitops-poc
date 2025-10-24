@@ -1,0 +1,72 @@
+name: CI build & push to Harbor
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*.*.*" ]
+
+jobs:
+  build-and-push:
+    runs-on: docker
+    container:
+      image: maven:3.9-eclipse-temurin-21
+    env:
+      REGISTRY: 172.18.0.2:30080        
+      PROJECT: todo
+      IMAGE_NAME: todolist-service
+      ALLOW_INSECURE: "true"           
+    steps:
+      - name: Install Node.js runtime for Actions
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y curl ca-certificates git bash
+          curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+          apt-get install -y nodejs
+          node -v
+
+      - uses: actions/checkout@v4
+
+      - name: Build & Push (Jib)
+        shell: bash
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_REF:-}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="$(echo "${GITHUB_SHA:-dev}" | cut -c1-7)"
+          fi
+          IMAGE="${REGISTRY}/${PROJECT}/${IMAGE_NAME}:${TAG}"
+          echo "IMAGE=${IMAGE}"
+
+          mvn -B -DskipTests clean package
+
+          mvn -B -DskipTests \
+            -Dimage="${IMAGE}" \
+            -Djib.to.image="${IMAGE}" \
+            -Djib.to.auth.username="${HARBOR_USERNAME}" \
+            -Djib.to.auth.password="${HARBOR_PASSWORD}" \
+            -Djib.allowInsecureRegistries="${ALLOW_INSECURE}" \
+            -DsendCredentialsOverHttp=true \
+            com.google.cloud.tools:jib-maven-plugin:3.4.3:build
+
+      - name: Also push :latest (main only)
+        if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+        shell: bash
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          set -euo pipefail
+          IMAGE="${REGISTRY}/${PROJECT}/${IMAGE_NAME}:latest"
+          echo "IMAGE=${IMAGE}"
+
+          mvn -B -DskipTests \
+            -Dimage="${IMAGE}" \
+            -Djib.to.image="${IMAGE}" \
+            -Djib.to.auth.username="${HARBOR_USERNAME}" \
+            -Djib.to.auth.password="${HARBOR_PASSWORD}" \
+            -Djib.allowInsecureRegistries="${ALLOW_INSECURE}" \
+            -DsendCredentialsOverHttp=true \
+            com.google.cloud.tools:jib-maven-plugin:3.4.3:build

@@ -1,0 +1,15 @@
+name: Action Example
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Execute an example print
+      run: echo "Hello, Gitea!"
+    - name: Other command
+      run: |
+        echo "This is another step"
+        ls -l
